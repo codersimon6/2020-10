@@ -1,6 +1,31 @@
 import java.util.Arrays;
 
-public class heap {
+public class priorityqueue {
+    private int []array= new int[100];
+    private int size = 0;
+
+    //入队列
+    public void offer(int x){
+        array[size] = x;
+        size ++;
+        //新插入元素可能破坏原先的优先队列，对其进行向上调整
+        shiftup(array,size-1);
+    }
+
+    //出队列，即将下标为0的元素删除并返回。
+    //具体思路:用最后一个元素替换第一个元素，同时size—，删掉最后一个元素。
+    //对第一个元素出发，进行向下调整即可
+    public int poll(){
+        int pollnum = array[0];
+        array[0] = array[size-1];
+        size --;
+        shiftdown(array,size,0);
+        return pollnum;
+    }
+
+    public int peek(){
+        return array[0];
+    }
 
     //向下调整，按大堆实现(父节点值大于子节点）
     public static void shiftdown(int []array,int size,int index){
@@ -29,8 +54,7 @@ public class heap {
         }
     }
 
-    //向上调整,基本思路相同，不写注释
-    public  static void shiftfup(int []array,int index){
+    public  static void shiftup(int []array,int index){
         int child = index;
         int parent = (child -1) /2;
         while (child > 0){
@@ -44,18 +68,21 @@ public class heap {
         }
     }
 
-    public static void creat(int array[],int size){
-        //若基于向下调整建堆，则需要从后往前遍历。否则会出错
-        for(int i = (size-1-1)/2;i >= 0;i--){
-            // size-1是找到最后的叶子节点，而再-1并且除2，是找到父节点
-            shiftdown( array,size ,i);
-        }
+    public boolean isempy(){
+        return size==0;
     }
 
-
     public static void main(String[] args) {
-        int []array = {9,5,2,7,3,6,8};
-        creat(array,array.length);
-        System.out.println(Arrays.toString(array));
+        priorityqueue queue = new priorityqueue();
+        queue.offer(9);
+        queue.offer(5);
+        queue.offer(2);
+        queue.offer(7);
+        queue.offer(3);
+        queue.offer(6);
+        queue.offer(8);
+        while (!queue.isempy()){
+            System.out.println(queue.poll());
+        }
     }
 }

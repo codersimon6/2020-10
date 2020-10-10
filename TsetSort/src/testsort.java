@@ -163,7 +163,66 @@ public class testsort {
         }
     }
 
-   
+    //归并排序递归体
+    public static void MergeSort(int []array,int left,int right){
+        if (left >= right-1)return;
+        int mid = (left + right)/2;
+        MergeSort(array,left,mid);
+        MergeSort(array,mid,right);
+        Merge(array,left,mid,right);
+    }
+    /**
+     * 将切分的数组进行归并排序
+     * @param array 带排序数组
+     * @param left 左边数组第一个元素索引
+     * @param mid 左边数组最后一个元素索引，mid为右边数组第一个元素索引
+     * @param right 右边数组最后一个元素索引
+     */
+    public static void Merge(int []array,int left,int mid,int right){
+        int []tem = new int [right - left ];
+        int i = left,j = mid;
+        int k = 0;
+        while (i < mid && j < right) {
+            // 加入等于，保证稳定性
+            if (array[i] <= array[j]) {
+                tem[k++] = array[i++];
+            } else {
+                tem[k++] = array[j++];
+            }
+        }
+        //处理完，剩余元素放进去。
+        while (i < mid){
+            tem[k++] = array[i++];
+        }
+        while (j < right){
+            tem[k++] = array[j++];
+        }
+        //从临时数组搬运到原数组
+        for(int t = 0;t < right - left;t++){
+            array[left+t] = tem[t];
+        }
+    }
+    //归并排序非递归实现
+    public static void MergeSort2(int []array){
+        //引入一个gap变量进行分组.gap为1时，[0]和[1]进行归并，[2]和[3]进行归并
+        //gap为2时，[0，1]和[2，3]进行归并
+        if(array.length == 1 || array == null)return;
+        //gap表示归并的数组大小，每归并一次，长度就是上次的二倍。
+        for(int gap = 1;gap < array.length;gap = gap *2){
+            //相邻组就是 [left,mid) [mid,right)
+            for (int i = 0;i < array.length;i = i + 2*gap){
+                int left = i;
+                int mid = i+gap;
+                int right = i+gap *2;
+                //防止下标越界
+                if(mid > array.length)mid = array.length;
+                if(right > array.length)right = array.length;
+                Merge(array,left,mid,right);
+            }
+        }
+
+    }
+
     public static void main(String[] args) {
         int[] array = {2,5,7,8,3,6,9};
         //InsertSort(array);
@@ -172,6 +231,7 @@ public class testsort {
         //HeapSort(array);
         //BubbleSort(array);
         //QuickSort2(array);
+        MergeSort2(array);
         System.out.println(Arrays.toString(array));
     }
 }

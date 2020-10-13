@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-class TreeNode {
+class TreeNode {//节点
     int val;
     TreeNode left;
     TreeNode right;
